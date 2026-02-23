@@ -18,6 +18,17 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 // Register Services
 builder.Services.AddScoped<IGameService, GameService>();
 
+// Configure CORS to allow all origins
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 var app = builder.Build();
@@ -30,6 +41,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
